@@ -156,6 +156,7 @@ const App = (() => {
     });
     const clusters = Object.entries(groups).map(([locId, people]) => ({ locId, people }));
     TripMap.setPeople(clusters);
+    TripMap.setHomeMarker(day.home);
     renderCount(present);
 
     // mapa

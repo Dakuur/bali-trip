@@ -11,6 +11,7 @@ const TripMap = (() => {
   let basemap = 'sat';         // 'sat' | 'map'
   const poiMarkers = {};      // id → { marker, cat }
   const flightPaths = [];      // { line, glow, color }
+  let homeMarkerId = null;     // marcador "casa" del dia actual
 
   /* ---- Inicialització ---- */
   function init() {
@@ -83,6 +84,8 @@ const TripMap = (() => {
       });
       const marker = L.marker(loc.ll, { icon, riseOnHover: true });
       marker.bindPopup(popupHtml(id, loc), { closeButton: true, autoPanPadding: [40, 80] });
+      // clic a la casa del dia → mostra/amaga els cercles de persones
+      marker.on('click', () => { if (id === homeMarkerId) togglePeople(); });
       marker.addTo(poiLayer);
       poiMarkers[id] = { marker, cat: loc.cat, el: null };
     });
@@ -195,14 +198,26 @@ const TripMap = (() => {
   }
 
   /* ---- Clústers de persones (un per localització) ----
+   *  Per defecte estan AMAGATS. Es mostren en clicar la casa del dia.
    *  clusters: [{ locId, people: [...] }, ...]
    * ------------------------------------------------------ */
   let peopleMarkers = [];
+  let pendingClusters = [];
+  let peopleVisible = false;
+
   function setPeople(clusters) {
+    pendingClusters = clusters;
+    hidePeople();               // en canviar de dia, sempre amagats de nou
+  }
+
+  function clearPeopleMarkers() {
     peopleMarkers.forEach(m => peopleLayer.removeLayer(m));
     peopleMarkers = [];
+  }
 
-    clusters.forEach(({ locId, people }) => {
+  function renderPeopleMarkers() {
+    clearPeopleMarkers();
+    pendingClusters.forEach(({ locId, people }) => {
       const loc = LOCATIONS[locId];
       if (!loc || people.length === 0) return;
       const avatars = people.map(p =>
@@ -214,12 +229,44 @@ const TripMap = (() => {
         className: 'people-icon',
         html: `<div class="people-cluster">${avatars}</div>`,
         iconSize: [92, h],
-        iconAnchor: [46, h / 2],
+        iconAnchor: [46, h + 20],   // flota just per sobre de la casa
       });
-      const marker = L.marker(loc.ll, { icon, interactive: false, zIndexOffset: 1000 });
+      const marker = L.marker(loc.ll, { icon, interactive: false, zIndexOffset: 1200 });
       marker.addTo(peopleLayer);
       peopleMarkers.push(marker);
     });
+  }
+
+  function showPeople() { if (!peopleVisible) { peopleVisible = true; renderPeopleMarkers(); } }
+  function hidePeople() { if (peopleVisible || peopleMarkers.length) { peopleVisible = false; clearPeopleMarkers(); } }
+  function togglePeople() { peopleVisible ? hidePeople() : showPeople(); }
+
+  /* ---- Marcador "casa" del dia (més gran + clic mostra les persones) ---- */
+  function styleHome(id, on) {
+    const p = poiMarkers[id];
+    if (!p) return;
+    const el = p.marker.getElement();
+    if (!el) return;
+    const poi = el.querySelector('.poi');
+    if (poi) poi.classList.toggle('poi-home', on);
+  }
+
+  function setHomeMarker(id) {
+    // el marcador que deixa de ser casa: treu estil i recupera el seu popup
+    if (homeMarkerId && homeMarkerId !== id) {
+      styleHome(homeMarkerId, false);
+      const prev = poiMarkers[homeMarkerId];
+      if (prev) prev.marker.bindPopup(popupHtml(homeMarkerId, LOCATIONS[homeMarkerId]), { closeButton: true, autoPanPadding: [40, 80] });
+    }
+    hidePeople();
+    homeMarkerId = id;
+    // la casa del dia no obre popup: el clic mostra/amaga els cercles de persones
+    const cur = poiMarkers[id];
+    if (cur) cur.marker.unbindPopup();
+    styleHome(id, true);
+    // reaplica quan el marcador ja s'ha renderitzat a la vista
+    setTimeout(() => styleHome(id, true), 300);
+    setTimeout(() => styleHome(id, true), 1000);
   }
 
   /* ---- Càmera ---- */
@@ -266,7 +313,8 @@ const TripMap = (() => {
 
   return {
     init, showFlights, setCategoryVisible, highlightStops,
-    setPeople, frameDay, flyTo, getMap, setBasemap, toggleBasemap, openLocation,
+    setPeople, setHomeMarker, frameDay, flyTo, getMap,
+    setBasemap, toggleBasemap, openLocation,
   };
 })();
 

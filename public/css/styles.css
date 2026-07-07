@@ -58,7 +58,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: absolute;
   top: 0; left: 0; right: 0;
   z-index: 500;
-  padding: 16px 18px 0;
+  padding: 10px 14px 0;
   pointer-events: none;
 }
 
@@ -92,7 +92,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* rodeta / carrusel de dies */
 .wheel {
-  margin-top: 12px;
+  margin-top: 0;
   pointer-events: auto;
   background: var(--panel);
   backdrop-filter: var(--blur);
@@ -162,11 +162,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .day-chip.active { opacity: 1; transform: scale(1.05); }
 .day-chip.active .dc-num { color: var(--accent); }
 
-/* ---- Commutador satèl·lit / mapa ---- */
+/* ---- Commutador satèl·lit / mapa (dalt esquerra, sota la barra dels dies) ---- */
 .basemap-toggle {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: 96px;
+  left: 14px;
   z-index: 500;
   display: flex;
   align-items: center;
@@ -302,7 +302,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
  * ========================================================================== */
 .sidebar {
   position: absolute;
-  top: 150px;
+  top: 100px;
   right: 16px;
   bottom: 16px;
   width: 340px;
@@ -439,6 +439,21 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .poi-wrap:hover .poi { transform: rotate(45deg) scale(1.15); }
 .poi-dim { opacity: 0.45; filter: grayscale(0.4); }
 
+/* casa del dia actual: més gran, ressaltada i amb pols (clicable) */
+.poi.poi-home {
+  transform: rotate(45deg) scale(1.55);
+  border-color: #fff;
+  z-index: 6;
+  cursor: pointer;
+  animation: homePulse 2.2s ease-in-out infinite;
+}
+.poi-wrap:hover .poi.poi-home { transform: rotate(45deg) scale(1.7); }
+.poi.poi-home span { font-size: 16px; }
+@keyframes homePulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255,255,255,0.30), 0 5px 16px rgba(0,0,0,0.6); }
+  50%      { box-shadow: 0 0 0 9px rgba(255,255,255,0.06), 0 5px 16px rgba(0,0,0,0.6); }
+}
+
 /* clúster de persones */
 .people-cluster {
   display: flex;
@@ -563,7 +578,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .day-chip { flex-basis: 76px; }
   .wheel-indicator { width: 78px; }
   .topbar { padding: 12px 12px 0; }
-  .basemap-toggle { top: 12px; right: 12px; padding: 8px 12px; }
+  .basemap-toggle { top: 86px; left: 12px; right: auto; padding: 8px 12px; }
 }
 @media (max-width: 420px) {
   .brand .name { font-size: 15px; }
