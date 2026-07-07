@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bali 2026 — David</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #F2E8D9;
+    --terracotta: #C4622D;
+    --jungle: #2D5016;
+    --ocean: #1A6B8A;
+    --gold: #D4A847;
+    --dark: #1A1208;
+    --cream: #FAF5EC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--dark);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4rem 3rem;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(196,98,45,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(26,107,138,0.25) 0%, transparent 55%),
+      radial-gradient(ellipse at 60% 80%, rgba(45,80,22,0.2) 0%, transparent 50%);
+  }
+
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: 
+      repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%),
+      repeating-linear-gradient(-45deg, #fff 0, #fff 1px, transparent 0, transparent 50%);
+    background-size: 20px 20px;
+  }
+
+  .hero-badge {
+    position: relative;
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    color: var(--sand);
+    line-height: 0.9;
+    position: relative;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--terracotta);
+  }
+
+  .hero-meta {
+    position: relative;
+    display: flex;
+    gap: 3rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(242,232,217,0.15);
+  }
+
+  .hero-meta-item {
+    color: rgba(242,232,217,0.6);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-meta-item strong {
+    display: block;
+    color: var(--sand);
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.2rem;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    right: 3rem;
+    bottom: 4rem;
+    writing-mode: vertical-rl;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(242,232,217,0.3);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-scroll::after {
+    content: '';
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(242,232,217,0.3), transparent);
+  }
+
+  /* BUDGET STRIP */
+  .budget-strip {
+    background: var(--terracotta);
+    padding: 1.2rem 3rem;
+    display: flex;
+    gap: 3rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .budget-strip::-webkit-scrollbar { display: none; }
+
+  .budget-item {
+    white-space: nowrap;
+    color: var(--sand);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+
+  .budget-item strong {
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: block;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  /* ZONE HEADERS */
+  .zone {
+    margin-bottom: 4rem;
+  }
+
+  .zone-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(26,18,8,0.1);
+  }
+
+  .zone-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: rgba(26,18,8,0.08);
+    font-weight: 700;
+    user-select: none;
+  }
+
+  .zone-info {}
+
+  .zone-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .tag-jungle { background: rgba(45,80,22,0.1); color: var(--jungle); }
+  .tag-surf { background: rgba(26,107,138,0.1); color: var(--ocean); }
+  .tag-island { background: rgba(212,168,71,0.15); color: #9A6E10; }
+  .tag-cliff { background: rgba(196,98,45,0.1); color: var(--terracotta); }
+
+  .zone-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .zone-dates {
+    font-size: 0.8rem;
+    color: rgba(26,18,8,0.45);
+    margin-top: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .zone-stay {
+    margin-top: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--sand);
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+  }
+
+  .zone-stay span { color: rgba(26,18,8,0.5); }
+  .zone-stay strong { color: var(--dark); }
+
+  /* DAYS */
+  .days { display: flex; flex-direction: column; gap: 0; }
+
+  .day {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1.5rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid rgba(26,18,8,0.06);
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeUp 0.4s forwards;
+  }
+
+  .day:last-child { border-bottom: none; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .day-date {
+    text-align: right;
+    padding-top: 2px;
+  }
+
+  .day-date .dd {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--dark);
+  }
+
+  .day-date .mmm {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(26,18,8,0.4);
+    display: block;
+  }
+
+  .day-content {}
+
+  .day-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .slot {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+
+  .slot-time {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(26,18,8,0.35);
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 40px;
+  }
+
+  .slot-body {}
+
+  .slot-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--dark);
+    line-height: 1.3;
+  }
+
+  .slot-desc {
+    font-size: 0.78rem;
+    color: rgba(26,18,8,0.5);
+    margin-top: 0.1rem;
+    line-height: 1.4;
+  }
+
+  .slot-price {
+    display: inline-block;
+    margin-top: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--terracotta);
+    font-weight: 500;
+  }
+
+  /* TAGS */
+  .activity-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+
+  .atag {
+    font-size: 0.62rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .atag-culture { background: rgba(45,80,22,0.08); color: var(--jungle); }
+  .atag-nature { background: rgba(26,107,138,0.08); color: var(--ocean); }
+  .atag-beach { background: rgba(212,168,71,0.12); color: #8A6010; }
+  .atag-food { background: rgba(196,98,45,0.08); color: var(--terracotta); }
+  .atag-adventure { background: rgba(26,18,8,0.06); color: rgba(26,18,8,0.6); }
+
+  /* SPECIAL NOTES */
+  .note-box {
+    background: var(--dark);
+    color: var(--sand);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .note-box::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(196,98,45,0.15);
+  }
+
+  .note-box .note-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .note-box p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: rgba(242,232,217,0.75);
+    position: relative;
+  }
+
+  .note-box strong {
+    color: var(--sand);
+  }
+
+  /* BUDGET TABLE */
+  .budget-section {
+    background: var(--dark);
+    color: var(--sand);
+    padding: 3rem;
+    border-radius: 16px;
+    margin-top: 4rem;
+  }
+
+  .budget-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: var(--sand);
+  }
+
+  .budget-table { width: 100%; border-collapse: collapse; }
+
+  .budget-table tr {
+    border-bottom: 1px solid rgba(242,232,217,0.08);
+  }
+
+  .budget-table tr:last-child { border-bottom: none; }
+
+  .budget-table td {
+    padding: 0.8rem 0;
+    font-size: 0.85rem;
+    color: rgba(242,232,217,0.65);
+  }
+
+  .budget-table td:last-child {
+    text-align: right;
+    font-weight: 500;
+    color: var(--sand);
+  }
+
+  .budget-total td {
+    padding-top: 1.5rem !important;
+    border-top: 1px solid rgba(242,232,217,0.2) !important;
+    font-size: 1rem !important;
+    color: var(--sand) !important;
+    font-weight: 500;
+  }
+
+  .budget-total td:last-child {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem !important;
+    color: var(--gold) !important;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 3rem;
+    font-size: 0.75rem;
+    color: rgba(26,18,8,0.3);
+    letter-spacing: 0.1em;
+  }
+
+  /* ANIMATION DELAYS */
+  .day:nth-child(1) { animation-delay: 0.05s; }
+  .day:nth-child(2) { animation-delay: 0.1s; }
+  .day:nth-child(3) { animation-delay: 0.15s; }
+  .day:nth-child(4) { animation-delay: 0.2s; }
+  .day:nth-child(5) { animation-delay: 0.25s; }
+  .day:nth-child(6) { animation-delay: 0.3s; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 3rem 1.5rem; }
+    main { padding: 2.5rem 1.2rem; }
+    .budget-strip { padding: 1rem 1.5rem; }
+    .budget-section { padding: 2rem 1.5rem; }
+    .hero-scroll { display: none; }
+    .zone-number { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pattern"></div>
+  <span class="hero-badge">✦ Viatge planificat</span>
+  <h1><em>Bali</em><br>2026</h1>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><strong>David Morillo</strong>Viatger</div>
+    <div class="hero-meta-item"><strong>27 Jul — 9 Ago</strong>13 dies</div>
+    <div class="hero-meta-item"><strong>BCN → DXB → KUL → DPS</strong>Emirates EK186</div>
+    <div class="hero-meta-item"><strong>35 kg</strong>Equipatge facturat</div>
+  </div>
+  <div class="hero-scroll">Desplaça</div>
+</div>
+
+<!-- BUDGET STRIP -->
+<div class="budget-strip">
+  <div class="budget-item"><strong>235€</strong>Allotjament</div>
+  <div class="budget-item"><strong>195€</strong>Menjar</div>
+  <div class="budget-item"><strong>120€</strong>Transport intern</div>
+  <div class="budget-item"><strong>245€</strong>Activitats</div>
+  <div class="budget-item"><strong>60€</strong>Beach clubs</div>
+  <div class="budget-item"><strong>44€</strong>e-VOA + Tourist Levy</div>
+  <div class="budget-item"><strong>50€</strong>Assegurança</div>
+  <div class="budget-item"><strong>60€</strong>Compres/souvenirs</div>
+  <div class="budget-item"><strong>~1.083€</strong>Total sense vol</div>
+</div>
+
+<main>
+
+  <!-- ZONA 1: UBUD -->
+  <div class="zone">
+    <div class="zone-header">
+      <div class="zone-number">01</div>
+      <div class="zone-info">
+        <span class="zone-tag tag-jungle">Cultura · Natura · Interior</span>
+        <h2 class="zone-title">Ubud</h2>
+        <div class="zone-dates">27 juliol → 1 agost · 5 nits</div>
+        <div class="zone-stay">
+          <span>🏠</span>
+          <span>Guesthouse amb esmorzar</span>
+          <strong>~18€/nit · Total 90€</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="days">
+
+      <div class="day">
+        <div class="day-date"><span class="dd">27</span><span class="mmm">Jul</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">21:00</span>
+              <div class="slot-body">
+                <div class="slot-title">Arribada a Bali DPS</div>
+                <div class="slot-desc">e-VOA + Tourist Levy QR + aduanes e-CD. Fora de l'aeroport ~21:50h</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">22:00</span>
+              <div class="slot-body">
+                <div class="slot-title">Grab cap a Ubud</div>
+                <div class="slot-desc">Des de fora del perímetre de l'aeroport. Arribada ~23:00h</div>
+                <span class="slot-price">~12€</span>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">23:00</span>
+              <div class="slot-body">
+                <div class="slot-title">Check-in i dormir</div>
+                <div class="slot-desc">Primera nit a Ubud</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">28</span><span class="mmm">Jul</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Taller de talla de fusta a Mas</div>
+                <div class="slot-desc">El poble dels escultors, 15 min d'Ubud. Màscares, Garudas i figures de Ganesha des de 5€. Compra directa a l'artesà</div>
+                <span class="slot-price">~15€</span>
+                <div class="activity-tags">
+                  <span class="atag atag-culture">Cultura</span>
+                  <span class="atag atag-food">Artesania</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Mercat d'art d'Ubud + compres</div>
+                <div class="slot-desc">Instruments musicals, jabons naturals, cremes de coco, teles. Mercat central i carrer principal</div>
+                <span class="slot-price">~20€ compres</span>
+                <div class="activity-tags">
+                  <span class="atag atag-culture">Cultura</span>
+                  <span class="atag atag-food">Compres</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">29</span><span class="mmm">Jul</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">02:00</span>
+              <div class="slot-body">
+                <div class="slot-title">Sortida cap al Volcà Batur</div>
+                <div class="slot-desc">Trekking d'alba amb guia obligatori. 2h de pujada, vistes a 360° del llac i el Rinjani. Experiència imprescindible</div>
+                <span class="slot-price">~30€ guia inclòs</span>
+                <div class="activity-tags">
+                  <span class="atag atag-nature">Natura</span>
+                  <span class="atag atag-adventure">Aventura</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Tirta Gangga</div>
+                <div class="slot-desc">Palau d'aigua reial amb fonts i estancs ornamentals. Anar abans de les 8h per evitar turistes. Descans post-madrugada</div>
+                <span class="slot-price">~2€ entrada</span>
+                <div class="activity-tags">
+                  <span class="atag atag-culture">Cultura</span>
+                  <span class="atag atag-nature">Natura</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">30</span><span class="mmm">Jul</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Classe de cuina balinesa amb mercat</div>
+                <div class="slot-desc">Visita al mercat local a l'alba, compra d'ingredients i cuina de nasi goreng, satay i curry balinès des de zero</div>
+                <span class="slot-price">~30€ tot inclòs</span>
+                <div class="activity-tags">
+                  <span class="atag atag-food">Gastronomia</span>
+                  <span class="atag atag-culture">Cultura</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Arrossars de Jatiluwih</div>
+                <div class="slot-desc">Patrimoni UNESCO. Rutes de 2-4h entre terrasses d'arròs sense gairebé turistes. Millor que Tegalalang</div>
+                <span class="slot-price">~3€ entrada</span>
+                <div class="activity-tags">
+                  <span class="atag atag-nature">Natura</span>
+                  <span class="atag atag-adventure">Trekking</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">31</span><span class="mmm">Jul</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Taller d'ofrenes balineses (canang sari)</div>
+                <div class="slot-desc">Aprèn a fer les ofrenes diàries de flors i fulles de palma que es veuen arreu de l'illa. Molt immersiu, 2-3h</div>
+                <span class="slot-price">~10€</span>
+                <div class="activity-tags">
+                  <span class="atag atag-culture">Cultura</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Lliure Ubud — massatge + spa</div>
+                <div class="slot-desc">Massatge balinès tradicional. Descans abans de l'etapa Canggu</div>
+                <span class="slot-price">~8€ massatge</span>
+                <div class="activity-tags">
+                  <span class="atag atag-beach">Relax</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">1</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Tot el dia</span>
+              <div class="slot-body">
+                <div class="slot-title">Cascada Sekumpul — excursió nord</div>
+                <div class="slot-desc">La cascada més espectacular de Bali. 45 min de trekking per selva. Quasi sense turistes. Dia llarg però val la pena</div>
+                <span class="slot-price">~20€ guia inclòs</span>
+                <div class="activity-tags">
+                  <span class="atag atag-nature">Natura</span>
+                  <span class="atag atag-adventure">Trekking</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Trasllat cap a Canggu</div>
+                <span class="slot-price">~15€ taxi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ZONA 2: CANGGU -->
+  <div class="zone">
+    <div class="zone-header">
+      <div class="zone-number">02</div>
+      <div class="zone-info">
+        <span class="zone-tag tag-surf">Surf · Beach clubs · Nusa Penida</span>
+        <h2 class="zone-title">Canggu</h2>
+        <div class="zone-dates">1 agost → 4 agost · 3 nits</div>
+        <div class="zone-stay">
+          <span>🏄</span>
+          <span>Hostel surf vibes</span>
+          <strong>~15€/nit · Total 45€</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="days">
+
+      <div class="day">
+        <div class="day-date"><span class="dd">1</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Arribada + lloguer de moto</div>
+                <div class="slot-desc">~3€/dia. Imprescindible per moure's per Canggu</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Capvespre</span>
+              <div class="slot-body">
+                <div class="slot-title">Old Man's Beach Bar</div>
+                <div class="slot-desc">El bar més icònic de Canggu directament a la platja. Ambient surfista, cervesa Bintang ~1.5€</div>
+                <span class="slot-price">~8€ consumicions</span>
+                <div class="activity-tags">
+                  <span class="atag atag-beach">Platja</span>
+                  <span class="atag atag-beach">Beach bar</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">2</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Surf amb instructor a Batu Bolong</div>
+                <div class="slot-desc">Platja amb ones per a tots els nivells. Instructor el primer dia imprescindible si no has surfat mai</div>
+                <span class="slot-price">~15€ lloguer + instructor</span>
+                <div class="activity-tags">
+                  <span class="atag atag-adventure">Surf</span>
+                  <span class="atag atag-beach">Platja</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Finn's Beach Club</div>
+                <div class="slot-desc">El beach club més famós de Canggu. Piscina infinity amb vistes al mar. Consumició mínima ~15-20€</div>
+                <span class="slot-price">~20€ consumició mínima</span>
+                <div class="activity-tags">
+                  <span class="atag atag-beach">Beach club</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">3</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Tot el dia</span>
+              <div class="slot-body">
+                <div class="slot-title">Excursió Nusa Penida — dia complet</div>
+                <div class="slot-desc">Manta Point (raies manta de 3-4m garantides), Kelingking Beach (les vistes més icòniques d'Indonèsia), Crystal Bay (snorkel). El millor dia del viatge</div>
+                <span class="slot-price">~35€ tot inclòs (transport + snorkel)</span>
+                <div class="activity-tags">
+                  <span class="atag atag-nature">Naturalesa</span>
+                  <span class="atag atag-adventure">Snorkel</span>
+                  <span class="atag atag-beach">Platja</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">4</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Nit ant.</span>
+              <div class="slot-body">
+                <div class="slot-title">Mercat nocturn de Gianyar</div>
+                <div class="slot-desc">El millor street food de Bali. Babi guling, sate lilit, jamu. Quasi sense turistes, tot per 1-2€</div>
+                <span class="slot-price">~10€ menjar</span>
+                <div class="activity-tags">
+                  <span class="atag atag-food">Street food</span>
+                  <span class="atag atag-culture">Local</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Matí lliure — platja Batu Bolong</div>
+                <div class="slot-desc">Últim bany a Canggu, esmorzar en warung local</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Migdia</span>
+              <div class="slot-body">
+                <div class="slot-title">Trasllat a Gili Trawangan</div>
+                <div class="slot-desc">Padangbai → ferry → Gili T. ~3h en total</div>
+                <span class="slot-price">~25€ ferry</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ZONA 3: GILI T -->
+  <div class="zone">
+    <div class="zone-header">
+      <div class="zone-number">03</div>
+      <div class="zone-info">
+        <span class="zone-tag tag-island">Snorkel · Tortugues · Capvespres</span>
+        <h2 class="zone-title">Gili Trawangan</h2>
+        <div class="zone-dates">4 agost → 6 agost · 2 nits</div>
+        <div class="zone-stay">
+          <span>🐢</span>
+          <span>Bungalow bàsic</span>
+          <strong>~20€/nit · Total 40€</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="days">
+
+      <div class="day">
+        <div class="day-date"><span class="dd">4</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Arribada + lloguer de bici</div>
+                <div class="slot-desc">A Gili T no hi ha motos ni cotxes. La bici és l'únic transport (~2€/dia). L'illa es volta en 20 min</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Capvespre</span>
+              <div class="slot-body">
+                <div class="slot-title">Snorkel tortugues des de la riba</div>
+                <div class="slot-desc">Les tortugues marines surten des de la platja nord. Sense excursió ni guia, gratis si tens les ulleres</div>
+                <div class="activity-tags">
+                  <span class="atag atag-adventure">Snorkel</span>
+                  <span class="atag atag-nature">Tortugues</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Nit</span>
+              <div class="slot-body">
+                <div class="slot-title">Horizontal Beach Club — costat oest</div>
+                <div class="slot-desc">Vistes al Rinjani al capvespre. Còctel ~6€, molt més barat que Bali</div>
+                <span class="slot-price">~12€ consumicions</span>
+                <div class="activity-tags">
+                  <span class="atag atag-beach">Beach club</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">5</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Snorkel costat nord — tiburons punta negra</div>
+                <div class="slot-desc">Tiburons de punta negra petits i inofensius que es veuen des de la superfície. Corals i peixos tropicals</div>
+                <div class="activity-tags">
+                  <span class="atag atag-adventure">Snorkel</span>
+                  <span class="atag atag-nature">Naturalesa</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Relax platja — capvespre costat oest</div>
+                <div class="slot-desc">Les millors postes de sol de les Gilis. Últim capvespre a l'illa</div>
+                <div class="activity-tags">
+                  <span class="atag atag-beach">Platja</span>
+                  <span class="atag atag-beach">Relax</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Nit</span>
+              <div class="slot-body">
+                <div class="slot-title">Pesca nocturna amb pescadors locals</div>
+                <div class="slot-desc">Sortida en barca amb llums per atraure peixos. Sopar el que pesqueu. Coordinar amb l'hostel</div>
+                <span class="slot-price">~15€</span>
+                <div class="activity-tags">
+                  <span class="atag atag-culture">Local</span>
+                  <span class="atag atag-adventure">Aventura</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">6</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Esmorzar i trasllat cap a Uluwatu</div>
+                <div class="slot-desc">Ferry Gili T → Lombok + taxi + ferry Padangbai. ~3-4h en total</div>
+                <span class="slot-price">~30€ transport</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ZONA 4: ULUWATU + VILLA -->
+  <div class="zone">
+    <div class="zone-header">
+      <div class="zone-number">04</div>
+      <div class="zone-info">
+        <span class="zone-tag tag-cliff">Cliff diving · Kecak · Villa final</span>
+        <h2 class="zone-title">Uluwatu</h2>
+        <div class="zone-dates">6 agost → 9 agost · 3 nits</div>
+        <div class="zone-stay">
+          <span>🏊</span>
+          <span>1 nit guesthouse + 2 nits villa piscina (9 persones ~250€/nit)</span>
+          <strong>~20€ + ~56€/pers · Total 76€</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="days">
+
+      <div class="day">
+        <div class="day-date"><span class="dd">6</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Arribada a Uluwatu</div>
+                <div class="slot-desc">Check-in guesthouse primera nit</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Capvespre</span>
+              <div class="slot-body">
+                <div class="slot-title">Kecak Fire Dance al Temple d'Uluwatu</div>
+                <div class="slot-desc">50+ homes cantant en cercle amb foc al fons del penya-segat al capvespre. Una cerimònia real, no una representació turística. Imprescindible</div>
+                <span class="slot-price">~10€</span>
+                <div class="activity-tags">
+                  <span class="atag atag-culture">Cultura</span>
+                  <span class="atag atag-adventure">Espectacle</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">7</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Cliff diving a Thomas Beach</div>
+                <div class="slot-desc">Salts des de roques de 5-10m directament a l'Oceà Índic. Preguntar sempre als locals les corrents abans de saltar</div>
+                <span class="slot-price">~5€ accés platja</span>
+                <div class="activity-tags">
+                  <span class="atag atag-adventure">Cliff diving</span>
+                  <span class="atag atag-beach">Platja</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Migdia</span>
+              <div class="slot-body">
+                <div class="slot-title">Surf a Padang Padang Beach</div>
+                <div class="slot-desc">Una de les platges més bonites de Bali. Ones més tècniques que Canggu</div>
+                <div class="activity-tags">
+                  <span class="atag atag-adventure">Surf</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda</span>
+              <div class="slot-body">
+                <div class="slot-title">Single Fin Beach Club</div>
+                <div class="slot-desc">El millor beach club de Bali per preu/qualitat. Vistes a l'oceà des del penya-segat. Cervesa ~3€. Capvespre imprescindible</div>
+                <span class="slot-price">~15€ consumicions</span>
+                <div class="activity-tags">
+                  <span class="atag atag-beach">Beach club</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">8</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Check-in villa amb piscina privada 🏊</div>
+                <div class="slot-desc">Villa per als 9. Piscina, jardí tropical, cuina equipada. Última nit junts a Bali</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Últimes compres — souvenirs finals</div>
+                <div class="slot-desc">Teles ikat, jabons, cremes de coco, instruments musicals, mascares tallades. Mercat o botigues locals</div>
+                <span class="slot-price">~30€</span>
+                <div class="activity-tags">
+                  <span class="atag atag-food">Compres</span>
+                </div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Tarda/Nit</span>
+              <div class="slot-body">
+                <div class="slot-title">Piscina + barbacoa a la villa</div>
+                <div class="slot-desc">Última nit tots junts. Cuinar a la villa, piscina, capvespre de Bali</div>
+                <div class="activity-tags">
+                  <span class="atag atag-beach">Relax</span>
+                  <span class="atag atag-food">Gastronomia</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-date"><span class="dd">9</span><span class="mmm">Ago</span></div>
+        <div class="day-content">
+          <div class="day-slots">
+            <div class="slot">
+              <span class="slot-time">05:15</span>
+              <div class="slot-body">
+                <div class="slot-title">Els amics surten cap a l'aeroport 👋</div>
+                <div class="slot-desc">Vol 07:30 cap a Singapur. Han de sortir de la villa a les 5:15h. DPS a 30-40 min d'Uluwatu de nit</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">Matí</span>
+              <div class="slot-body">
+                <div class="slot-title">Esmorzar tranquil + últim bany a la piscina</div>
+                <div class="slot-desc">Tens tota la tarda per tu. Últimes hores a Bali</div>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">16:00</span>
+              <div class="slot-body">
+                <div class="slot-title">Taxi cap a l'aeroport DPS</div>
+                <div class="slot-desc">Vol EK369 a les 19:45. Arribar al check-in a les 17:45</div>
+                <span class="slot-price">~15€</span>
+              </div>
+            </div>
+            <div class="slot">
+              <span class="slot-time">19:45</span>
+              <div class="slot-body">
+                <div class="slot-title">Vol DPS → DXB → BCN</div>
+                <div class="slot-desc">Arribada Barcelona 10 agost 08:35h</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CREMACIÓ NOTE -->
+  <div class="note-box">
+    <div class="note-label">✦ Si tens sort</div>
+    <p><strong>Cremació balinesa (ngaben):</strong> si coincideix mentre ets a Ubud o Canggu, assisteix. És una celebració, no un dol — música, processons i colors. Pregunta a l'hostel si n'hi ha alguna de programada. Una de les experiències més autèntiques que pots viure a Bali.</p>
+  </div>
+
+  <!-- BUDGET -->
+  <div class="budget-section">
+    <h2>Resum econòmic</h2>
+    <table class="budget-table">
+      <tr><td>Allotjament (13 nits)</td><td>235 €</td></tr>
+      <tr><td>Menjar (13 dies · ~15€/dia)</td><td>195 €</td></tr>
+      <tr><td>Transport intern (taxis, ferries, moto)</td><td>120 €</td></tr>
+      <tr><td>Activitats (taller, volcà, cuina, cliff diving...)</td><td>245 €</td></tr>
+      <tr><td>Beach clubs + consumicions</td><td>60 €</td></tr>
+      <tr><td>e-VOA + Tourist Levy Bali</td><td>44 €</td></tr>
+      <tr><td>Assegurança de viatge (AIG)</td><td>50 €</td></tr>
+      <tr><td>SIM local Indonesia</td><td>8 €</td></tr>
+      <tr><td>Compres i souvenirs</td><td>60 €</td></tr>
+      <tr><td>Imprevistos</td><td>50 €</td></tr>
+      <tr class="budget-total"><td>Total sense vol</td><td>~1.083 €</td></tr>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  Bali 2026 · David Morillo · BCN → DXB → KUL → DPS · EK186
+</footer>
+
+</body>
+</html>

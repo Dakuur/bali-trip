@@ -1,0 +1,19 @@
+# IDE
+.idea/
+*.iml
+
+# Documents personals d'origen (no necessaris per a l'app desplegada)
+# (només l'arrel; els PDFs de reserva que fa servir l'app viuen a public/docs/)
+/indonesia/
+/vols-david.pdf
+
+# Firebase
+.firebase/
+firebase-debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (per si s'hi afegeix tooling)
+node_modules/

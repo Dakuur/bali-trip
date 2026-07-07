@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0c">
+  <title>Singapur · Bali 2026</title>
+
+  <!-- Font: SF (Apple) natiu amb Montserrat de reserva -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- INTRO -->
+  <div class="intro" id="intro">
+    <div class="eyebrow">Estiu 2026</div>
+    <h1>Singapur <em>·</em> Bali</h1>
+    <p class="sub">Un mapa interactiu del viatge: dia a dia, on som cadascú, els vols, les villes i totes les activitats.</p>
+    <button class="enter" id="enterBtn">Comença el viatge</button>
+  </div>
+
+  <!-- MAPA -->
+  <div id="map"></div>
+
+  <!-- CAPÇALERA + RODETA -->
+  <div class="topbar">
+    <div class="title-row">
+      <div class="brand">
+        <span class="eyebrow">Itinerari</span>
+        <span class="name">Singapur <span>·</span> Bali</span>
+      </div>
+    </div>
+
+    <div class="wheel" id="wheel">
+      <div class="wheel-indicator"></div>
+      <div class="wheel-track" id="wheelTrack"></div>
+    </div>
+  </div>
+
+  <!-- COMMUTADOR SATÈL·LIT / MAPA -->
+  <button class="basemap-toggle" id="basemapToggle" aria-label="Canviar vista del mapa">
+    <span class="bm-icon">🛰️</span>
+    <span class="bm-label" id="bmLabel">Satèl·lit</span>
+  </button>
+
+  <!-- BARRA LATERAL — itinerari del dia (fil conductor) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-head">
+      <div class="sb-day" id="sbDay">—</div>
+      <div class="sb-title" id="sbTitle">—</div>
+      <div class="sb-region" id="sbRegion">—</div>
+    </div>
+    <div class="sb-timeline" id="sbTimeline"></div>
+  </aside>
+
+  <!-- Botó itinerari (mòbil) -->
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Mostrar itinerari">
+    <span>📋</span><span class="st-label">Itinerari</span>
+  </button>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="pill">
+      <button class="play-btn" id="playBtn" aria-label="Reproduir">►</button>
+      <div class="day-readout">
+        <div class="dr-title" id="drTitle">—</div>
+        <div class="dr-region" id="drRegion">—</div>
+      </div>
+    </div>
+    <div class="people-count" id="peopleCount"></div>
+  </div>
+
+  <!-- LLEGENDA / FILTRES -->
+  <div class="legend" id="legend">
+    <div class="legend-head" id="legendHead">
+      <span>Llegenda · filtres</span>
+      <span class="chev">▾</span>
+    </div>
+    <div class="legend-body" id="legendBody"></div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- App -->
+  <script src="js/data.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
