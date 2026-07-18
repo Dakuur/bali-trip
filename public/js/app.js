@@ -195,12 +195,10 @@ const App = (() => {
 
       const links = [];
       if (loc && loc.link) links.push(`<a class="tl-book" href="${loc.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${loc.linkLabel || 'Mapa'} ↗</a>`);
-      // documents (tickets) — protegits amb contrasenya
-      const docFiles = [];
-      if (item.pdf) docFiles.push({ file: item.pdf, label: 'Ticket' });
-      if (loc && loc.pdfs) loc.pdfs.forEach(p => docFiles.push({ file: p.file, label: p.label }));
-      if (docFiles.length) {
-        if (unlocked) docFiles.forEach(d => links.push(`<a class="tl-pdf" href="${d.file}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📄 ${d.label}</a>`));
+      // document (ticket) d'aquesta entrada — protegit amb contrasenya.
+      // Només el ticket propi de l'ítem; la llista completa per lloc és al popup del mapa.
+      if (item.pdf) {
+        if (unlocked) links.push(`<a class="tl-pdf" href="${item.pdf}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📄 Ticket</a>`);
         else links.push(`<span class="tl-locked" onclick="event.stopPropagation()">🔒 Ticket</span>`);
       }
 
