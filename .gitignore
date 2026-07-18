@@ -7,8 +7,12 @@
 /indonesia/
 /vols-david.pdf
 # Carpeta de tickets/documents d'origen — conté passaports, DNIs, assegurances,
-# etc. NO s'ha de pujar mai. Els tickets no sensibles ja es copien a public/docs/t/.
+# etc. NO s'ha de pujar mai.
 /documents-drive/
+
+# Tickets/reserves de l'app: es despleguen a Firebase des del disc, però NO
+# es pugen a git (informació confidencial i el repo és públic).
+/public/docs/
 
 # Firebase
 .firebase/
