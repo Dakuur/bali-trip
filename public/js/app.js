@@ -351,7 +351,7 @@ const App = (() => {
    *  substitueix DOC_HASH. Nota: aquesta protecció amaga els enllaços però no
    *  xifra els fitxers; els noms de docs/t/ són no endevinables com a mesura
    *  extra. Per a seguretat real caldria autenticació al servidor. */
-  const DOC_HASH = '54b134339a41eec6b7ac8d6f2a8c6d55aa67b97893c896b9daa0bf153b8f9f8e';
+  const DOC_HASH = 'caa02b2e0854029056c1fc5e3320c4f68699c294fbebafbef284b80e5e6ea2f0';
   async function checkPassword(text) {
     try {
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
