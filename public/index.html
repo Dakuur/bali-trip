@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0a0a0c">
   <title>Singapur · Bali 2026</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
 
   <!-- Font: SF (Apple) natiu amb Montserrat de reserva -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,8 +25,14 @@
   <div class="intro" id="intro">
     <div class="eyebrow">Estiu 2026</div>
     <h1>Singapur <em>·</em> Bali</h1>
-    <p class="sub">Un mapa interactiu del viatge: dia a dia, on som cadascú, els vols, les villes i totes les activitats.</p>
-    <button class="enter" id="enterBtn">Comença el viatge</button>
+    <p class="sub">Un mapa interactiu del viatge: dia a dia, on som cadascú, els vols, els allotjaments i les activitats.</p>
+    <div class="intro-gate">
+      <input type="password" id="pwInput" class="pw-input" placeholder="Contrasenya del grup" autocomplete="off" spellcheck="false">
+      <div class="intro-err" id="pwErr"></div>
+      <button class="enter" id="enterBtn">Entrar amb els tickets</button>
+      <button class="enter ghost" id="guestBtn">Entrar com a convidat</button>
+      <p class="intro-note">Amb la contrasenya del grup veuràs els tickets i reserves (vols, allotjaments, activitats). Com a convidat, l'itinerari i el mapa es veuen igual, però sense els documents confidencials.</p>
+    </div>
   </div>
 
   <!-- MAPA -->

@@ -3,9 +3,12 @@
 *.iml
 
 # Documents personals d'origen (no necessaris per a l'app desplegada)
-# (només l'arrel; els PDFs de reserva que fa servir l'app viuen a public/docs/)
+# (només l'arrel; els PDFs de reserva que fa servir l'app viuen a public/docs/t/)
 /indonesia/
 /vols-david.pdf
+# Carpeta de tickets/documents d'origen — conté passaports, DNIs, assegurances,
+# etc. NO s'ha de pujar mai. Els tickets no sensibles ja es copien a public/docs/t/.
+/documents-drive/
 
 # Firebase
 .firebase/

@@ -71,7 +71,7 @@ const TripMap = (() => {
       const cat = CATEGORIES[loc.cat];
       const html = `
         <div class="poi-wrap">
-          <div class="poi" style="background:${cat.color}">
+          <div class="poi${loc.booked ? ' poi-booked' : ''}" style="background:${cat.color}">
             <span>${cat.icon}</span>
           </div>
         </div>`;
@@ -83,7 +83,8 @@ const TripMap = (() => {
         popupAnchor: [0, -34],
       });
       const marker = L.marker(loc.ll, { icon, riseOnHover: true });
-      marker.bindPopup(popupHtml(id, loc), { closeButton: true, autoPanPadding: [40, 80] });
+      // popup en forma de funció → reflecteix l'estat d'autenticació en obrir-se
+      marker.bindPopup(() => popupHtml(id, loc), { closeButton: true, autoPanPadding: [40, 80] });
       // clic a la casa del dia → mostra/amaga els cercles de persones
       marker.on('click', () => { if (id === homeMarkerId) togglePeople(); });
       marker.addTo(poiLayer);
@@ -93,9 +94,16 @@ const TripMap = (() => {
 
   function popupHtml(id, loc) {
     const cat = CATEGORIES[loc.cat];
-    const pdfs = (loc.pdfs || []).map(p =>
-      `<a class="pcard-pdf" href="${p.file}" target="_blank" rel="noopener">📄 ${p.label}</a>`
-    ).join('');
+    const unlocked = !!(window.TripAuth && window.TripAuth.canSeeDocs);
+    const hasPdfs = (loc.pdfs || []).length > 0;
+    let docsBlock = '';
+    if (hasPdfs) {
+      docsBlock = unlocked
+        ? `<div class="pcard-pdfs">${loc.pdfs.map(p =>
+            `<a class="pcard-pdf" href="${p.file}" target="_blank" rel="noopener">📄 ${p.label}</a>`
+          ).join('')}</div>`
+        : `<div class="pcard-locked">🔒 Reserva protegida · entra amb contrasenya per veure el document</div>`;
+    }
     return `
       <div class="pcard">
         ${loc.img ? `<img class="pcard-img" src="${loc.img}" alt="" onerror="this.remove()">` : ''}
@@ -103,12 +111,14 @@ const TripMap = (() => {
           <span class="pcard-cat" style="background:${hexA(cat.color, 0.18)};color:${cat.color}">
             ${cat.icon} ${cat.label}
           </span>
+          ${loc.booked ? `<span class="pcard-booked">✓ Reservat</span>` : ''}
           ${loc.region ? `<div class="pcard-region">${loc.region}</div>` : ''}
           <h3>${loc.name}</h3>
           <p>${loc.desc || ''}</p>
+          ${loc.ref ? `<div class="pcard-ref">${loc.ref}</div>` : ''}
           ${loc.price ? `<div class="pcard-price">${loc.price}</div>` : ''}
           ${loc.link ? `<a class="pcard-link" href="${loc.link}" target="_blank" rel="noopener">${loc.linkLabel || 'Més info'} ↗</a>` : ''}
-          ${pdfs ? `<div class="pcard-pdfs">${pdfs}</div>` : ''}
+          ${docsBlock}
         </div>
       </div>`;
   }
@@ -256,7 +266,7 @@ const TripMap = (() => {
     if (homeMarkerId && homeMarkerId !== id) {
       styleHome(homeMarkerId, false);
       const prev = poiMarkers[homeMarkerId];
-      if (prev) prev.marker.bindPopup(popupHtml(homeMarkerId, LOCATIONS[homeMarkerId]), { closeButton: true, autoPanPadding: [40, 80] });
+      if (prev) prev.marker.bindPopup(() => popupHtml(homeMarkerId, LOCATIONS[homeMarkerId]), { closeButton: true, autoPanPadding: [40, 80] });
     }
     hidePeople();
     homeMarkerId = id;

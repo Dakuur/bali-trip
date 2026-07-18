@@ -2,6 +2,9 @@
  *  APP — rodeta de dies, play/pausa, presència de persones, llegenda/filtres
  * ========================================================================== */
 
+// estat d'autenticació global (documents/tickets visibles?)
+window.TripAuth = window.TripAuth || { canSeeDocs: false };
+
 const App = (() => {
   let current = 0;              // índex del dia actiu
   let playing = false;
@@ -176,6 +179,8 @@ const App = (() => {
     el.sbTitle.textContent = day.title;
     el.sbRegion.textContent = day.region;
 
+    const unlocked = !!(window.TripAuth && window.TripAuth.canSeeDocs);
+
     el.sbTimeline.innerHTML = (day.schedule || []).map(item => {
       const k = SCHEDULE_KINDS[item.kind] || SCHEDULE_KINDS.act;
       const loc = item.loc ? LOCATIONS[item.loc] : null;
@@ -184,20 +189,30 @@ const App = (() => {
       const icon = cat ? cat.icon : k.icon;
       const color = cat ? cat.color : k.color;
       const img = loc && loc.img ? loc.img : null;
+      const isRec = item.status === 'rec';
+      // confirmat = té ticket propi o el lloc està reservat
+      const confirmed = !isRec && (item.pdf || (loc && loc.booked) || item.kind === 'flight');
 
       const links = [];
-      if (loc && loc.link) links.push(`<a class="tl-book" href="${loc.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${loc.linkLabel || 'Reserva'} ↗</a>`);
-      if (item.pdf) links.push(`<a class="tl-pdf" href="${item.pdf}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📄 Reserva</a>`);
-      if (loc && loc.pdfs) loc.pdfs.forEach(p => links.push(`<a class="tl-pdf" href="${p.file}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📄 ${p.label}</a>`));
+      if (loc && loc.link) links.push(`<a class="tl-book" href="${loc.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${loc.linkLabel || 'Mapa'} ↗</a>`);
+      // documents (tickets) — protegits amb contrasenya
+      const docFiles = [];
+      if (item.pdf) docFiles.push({ file: item.pdf, label: 'Ticket' });
+      if (loc && loc.pdfs) loc.pdfs.forEach(p => docFiles.push({ file: p.file, label: p.label }));
+      if (docFiles.length) {
+        if (unlocked) docFiles.forEach(d => links.push(`<a class="tl-pdf" href="${d.file}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📄 ${d.label}</a>`));
+        else links.push(`<span class="tl-locked" onclick="event.stopPropagation()">🔒 Ticket</span>`);
+      }
 
       return `
-        <div class="tl-item">
+        <div class="tl-item${isRec ? ' tl-rec' : ''}${confirmed ? ' tl-confirmed' : ''}">
           <div class="tl-time">${item.t}</div>
           <div class="tl-marker" style="--c:${color}"><span>${icon}</span></div>
           <div class="tl-card${loc ? ' clickable' : ''}" ${loc ? `data-loc="${item.loc}"` : ''}>
             ${img ? `<img class="tl-img" src="${img}" alt="" loading="lazy" onerror="this.remove()">` : ''}
             <div class="tl-body">
-              <div class="tl-title">${item.title}</div>
+              <div class="tl-title">${item.title}${confirmed ? ' <span class="tl-badge">✓</span>' : ''}${isRec ? ' <span class="tl-tag">proposta</span>' : ''}</div>
+              ${item.ref && confirmed ? `<div class="tl-ref">${item.ref}</div>` : ''}
               ${item.note ? `<div class="tl-note">${item.note}</div>` : ''}
               ${links.length ? `<div class="tl-links">${links.join('')}</div>` : ''}
             </div>
@@ -297,12 +312,52 @@ const App = (() => {
       else { label.textContent = 'Satèl·lit'; icon.textContent = '🛰️'; }
     });
 
-    // intro
+    // intro + porta d'accés (contrasenya per als tickets / entrar com a convidat)
     const intro = document.getElementById('intro');
-    document.getElementById('enterBtn').addEventListener('click', () => {
+    const pwInput = document.getElementById('pwInput');
+    const pwErr = document.getElementById('pwErr');
+
+    function enterMap() {
       intro.classList.add('hidden');
       setTimeout(() => { TripMap.getMap().invalidateSize(); goTo(current, true); }, 400);
+    }
+
+    async function tryPassword() {
+      const val = (pwInput.value || '').trim();
+      if (!val) { pwInput.focus(); return; }
+      const ok = await checkPassword(val);
+      if (ok) {
+        window.TripAuth.canSeeDocs = true;
+        document.body.classList.add('docs-unlocked');
+        enterMap();
+      } else {
+        pwErr.textContent = 'Contrasenya incorrecta';
+        pwInput.classList.add('shake');
+        setTimeout(() => pwInput.classList.remove('shake'), 500);
+      }
+    }
+
+    document.getElementById('enterBtn').addEventListener('click', tryPassword);
+    pwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryPassword(); });
+    pwInput.addEventListener('input', () => { pwErr.textContent = ''; });
+    document.getElementById('guestBtn').addEventListener('click', () => {
+      window.TripAuth.canSeeDocs = false;
+      enterMap();
     });
+  }
+
+  /* ---- Comprovació de contrasenya (SHA-256, sense guardar-la en clar) ----
+   *  Per canviar la contrasenya: genera el hash sha256 de la nova paraula i
+   *  substitueix DOC_HASH. Nota: aquesta protecció amaga els enllaços però no
+   *  xifra els fitxers; els noms de docs/t/ són no endevinables com a mesura
+   *  extra. Per a seguretat real caldria autenticació al servidor. */
+  const DOC_HASH = '54b134339a41eec6b7ac8d6f2a8c6d55aa67b97893c896b9daa0bf153b8f9f8e';
+  async function checkPassword(text) {
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+      return hex === DOC_HASH;
+    } catch (_) { return false; }
   }
 
   const clamp = (i) => Math.max(0, Math.min(DAYS.length - 1, i));
