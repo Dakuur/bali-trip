@@ -180,6 +180,7 @@ const App = (() => {
     el.sbRegion.textContent = day.region;
 
     const unlocked = !!(window.TripAuth && window.TripAuth.canSeeDocs);
+    const shownDocs = new Set();   // evita repetir el mateix ticket dins el dia (ex: 2 trams d'un vol)
 
     el.sbTimeline.innerHTML = (day.schedule || []).map(item => {
       const k = SCHEDULE_KINDS[item.kind] || SCHEDULE_KINDS.act;
@@ -197,7 +198,8 @@ const App = (() => {
       if (loc && loc.link) links.push(`<a class="tl-book" href="${loc.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${loc.linkLabel || 'Mapa'} ↗</a>`);
       // document (ticket) d'aquesta entrada — protegit amb contrasenya.
       // Només el ticket propi de l'ítem; la llista completa per lloc és al popup del mapa.
-      if (item.pdf) {
+      if (item.pdf && !shownDocs.has(item.pdf)) {
+        shownDocs.add(item.pdf);
         if (unlocked) links.push(`<a class="tl-pdf" href="${item.pdf}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📄 Ticket</a>`);
         else links.push(`<span class="tl-locked" onclick="event.stopPropagation()">🔒 Ticket</span>`);
       }
